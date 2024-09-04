@@ -1,0 +1,211 @@
+Praksa - 4.9.
+
+CREATE TABLE "Account" (
+	"Id" UUID PRIMARY KEY,
+	"FirstName" VARCHAR(25) NOT NULL,
+	"LastName" VARCHAR(25) NOT NULL,
+	"Email" VARCHAR(100) UNIQUE NOT NULL,
+	"Password" VARCHAR(50) NOT NULL
+);
+
+INSERT INTO "Account"("Id", "FirstName", "LastName", "Email", "Password")
+VALUES(gen_random_uuid(), 'Marija', 'Zemljak', 'marijazemljak11@gmail.com', 'lozinka123' );
+
+INSERT INTO "Account"("Id", "FirstName", "LastName", "Email", "Password")
+VALUES(gen_random_uuid(), 'Maja', 'Halgaš', 'maja.halgas@gmail.com', 'bilojednom' );
+
+INSERT INTO "Account"("Id", "FirstName", "LastName", "Email", "Password")
+VALUES(gen_random_uuid(), 'Klara-Iva', 'Gerić', 'klaraivageric@gmail.com', 'lozinka987' );
+
+INSERT INTO "Account"("Id", "FirstName", "LastName", "Email", "Password")
+VALUES(gen_random_uuid(), 'Pero', 'Perić', 'peric.pero@gmail.com', 'password' );
+
+UPDATE "Account" SET "FirstName" = 'Maja' WHERE "Email" = 'klaraivageric@gmail.com';
+
+SELECT * FROM "Account" WHERE "FirstName" = 'Maja' AND "LastName" = 'Halgaš';
+
+SELECT * FROM "Account";
+
+
+
+CREATE TABLE "Customer" (
+	"Id" UUID PRIMARY KEY REFERENCES "Account"("Id"), 
+	"Address" VARCHAR(100) NOT NULL
+);
+
+INSERT INTO "Customer"("Id", "Address")
+VALUES('98f41762-dd79-4455-afad-8980ea17dc26', 'Dubrovacka 81, Osijek' );
+
+INSERT INTO "Customer"("Id", "Address")
+VALUES('d515ee57-cde1-4e03-83cb-662cb62b8b8a', 'Ilirska 27, Orahovica' );
+
+
+
+
+
+CREATE TABLE "VehicleType" (
+    "Id" UUID PRIMARY KEY,
+	"Brand" VARCHAR(30) NOT NULL,
+	"Model" VARCHAR(30) NOT NULL
+);
+
+INSERT INTO "VehicleType"("Id", "Brand", "Model")
+VALUES(gen_random_uuid(), 'Suzuki', 'Vitara' );
+
+INSERT INTO "VehicleType"("Id", "Brand", "Model")
+VALUES(gen_random_uuid(), 'Hyundai', 'i20' );
+
+UPDATE "VehicleType" SET "Model" = 'i30' WHERE "Model" = 'i20';
+
+SELECT * FROM "VehicleType";
+
+
+
+
+CREATE TABLE "DeliveryDriver" (
+	"Id" UUID PRIMARY KEY REFERENCES "Account"("Id"),
+	"VehicleTypeId" UUID,
+	CONSTRAINT "FK_DeliveryDriver_VehicleType_VehicleTypeId" FOREIGN KEY ("VehicleTypeId") REFERENCES "VehicleType"("Id")
+);
+
+INSERT INTO "DeliveryDriver"("Id", "VehicleTypeId")
+VALUES('fc14c75d-0c33-45ca-af86-0f657bb905d7', '1ffad322-e88b-42eb-a13b-726b339d7fdf' );
+
+INSERT INTO "DeliveryDriver"("Id", "VehicleTypeId")
+VALUES('28ceb127-becd-4bee-895e-881fc7b46ed9', 'e8a73312-0835-4dbe-b66f-986ca5423195');
+
+
+
+CREATE TABLE "Payment" (
+	"Id" UUID PRIMARY KEY,
+	"Method" VARCHAR(10) NOT NULL CHECK ("Method" IN ('Cash', 'Card'))
+);
+
+INSERT INTO "Payment"("Id", "Method")
+VALUES (gen_random_uuid(), 'Cash');
+
+INSERT INTO "Payment"("Id", "Method")
+VALUES (gen_random_uuid(), 'Card');
+
+INSERT INTO "Payment"("Id", "Method")
+VALUES (gen_random_uuid(), 'No');
+
+
+
+
+CREATE TABLE "Order" (
+	"Id" UUID PRIMARY KEY, 
+	"CustomerId" UUID,
+	"DeliveryDriverId" UUID,
+	"PaymentId" UUID,
+	"TotalPrice" DECIMAL NOT NULL,
+	"Date" TIMESTAMP NOT NULL,
+	"IsPaid" BOOLEAN NOT NULL DEFAULT FALSE,
+	CONSTRAINT "FK_Order_Customer_CustomerId" FOREIGN KEY ("CustomerId") REFERENCES "Customer"("Id"),
+	CONSTRAINT "FK_Order_DeliveryDriver_DeliveryDriverId" FOREIGN KEY ("DeliveryDriverId") REFERENCES "DeliveryDriver"("Id"),
+	CONSTRAINT "FK_Order_Payment_PaymentId" FOREIGN KEY ("PaymentId") REFERENCES "Payment"("Id")
+);
+
+INSERT INTO "Order"("Id", "CustomerId", "DeliveryDriverId", "PaymentId", "TotalPrice", "Date", "IsPaid")
+VALUES(gen_random_uuid(), '98f41762-dd79-4455-afad-8980ea17dc26', 'fc14c75d-0c33-45ca-af86-0f657bb905d7',
+'75c37398-36d9-4ed0-9645-115a28ce3429', 15.80, CURRENT_DATE, TRUE);
+
+INSERT INTO "Order"("Id", "CustomerId", "DeliveryDriverId", "PaymentId", "TotalPrice", "Date")
+VALUES(gen_random_uuid(), 'd515ee57-cde1-4e03-83cb-662cb62b8b8a', 'fc14c75d-0c33-45ca-af86-0f657bb905d7',
+'918b25e6-f75d-4a12-ac42-ddf0128cf95f', 27.53, CURRENT_DATE);
+
+UPDATE "Order" SET "Date" = LOCALTIMESTAMP WHERE "CustomerId" = 'd515ee57-cde1-4e03-83cb-662cb62b8b8a';
+
+SELECT * FROM "Customer";
+SELECT * FROM "DeliveryDriver";
+SELECT * FROM "Payment";
+SELECT * FROM "Order";
+
+SELECT * FROM "Order" WHERE "DeliveryDriverId" = 'fc14c75d-0c33-45ca-af86-0f657bb905d7' ORDER BY "Date" DESC;
+
+
+
+
+CREATE TABLE "Restaurant" (
+    "Id" UUID PRIMARY KEY, 
+	"Name" VARCHAR(50) NOT NULL,
+	"Address" VARCHAR(100) NOT NULL,
+	"Phone" VARCHAR(15) NOT NULL
+);
+
+INSERT INTO "Restaurant"("Id", "Name", "Address", "Phone")
+VALUES(gen_random_uuid(), 'Karaka', 'Divaltova 9, Osijek', '+385984561234');
+
+INSERT INTO "Restaurant"("Id", "Name", "Address", "Phone")
+VALUES(gen_random_uuid(), 'Umami', 'Kozjacka 56, Osijek', '+385977876453');
+
+SELECT * FROM "Restaurant";
+
+
+
+
+CREATE TABLE "Meal" (
+    "Id" UUID PRIMARY KEY,
+	"RestaurantId" UUID,
+	"Name" VARCHAR(50) NOT NULL,
+	"Price" DECIMAL(4,2),
+	CONSTRAINT "FK_Meal_Restaurant_RestaurantId" FOREIGN KEY ("RestaurantId") REFERENCES "Restaurant"("Id")
+);
+
+INSERT INTO "Meal"("Id", "RestaurantId", "Name", "Price")
+VALUES(gen_random_uuid(), '9b123411-ae29-485c-aaae-0a15e802f859', 'Tortilja s piletinom', 7.60);
+
+INSERT INTO "Meal"("Id", "RestaurantId", "Name", "Price")
+VALUES(gen_random_uuid(), 'a9fecdf6-6368-4ea8-b12c-eb0aebfce099', 'Tortilja vege', 6.80);
+
+INSERT INTO "Meal"("Id", "RestaurantId", "Name", "Price")
+VALUES(gen_random_uuid(), '9b123411-ae29-485c-aaae-0a15e802f859', 'Wok s piletinom', 9.50);
+
+SELECT * FROM "Meal" WHERE "Price" > 7.00;
+
+
+
+
+CREATE TABLE "MealOrder" (
+    "Id" UUID PRIMARY KEY,
+	"MealId" UUID,
+	"OrderId" UUID,
+	"Amount" INT NOT NULL,
+	CONSTRAINT "FK_MealOrder_Meal_MealId" FOREIGN KEY ("MealId") REFERENCES "Meal"("Id"),
+	CONSTRAINT "FK_MealOrder_Order_OrderId" FOREIGN KEY ("OrderId") REFERENCES "Order"("Id")
+);
+
+
+INSERT INTO "MealOrder"("Id", "MealId", "OrderId", "Amount")
+VALUES (gen_random_uuid(), '3c43b988-e7e6-432e-af63-af6b3b0cad70', 'a73ec5e2-748b-4f9d-b051-6b8348bb51e0', 3);
+
+INSERT INTO "MealOrder"("Id", "MealId", "OrderId", "Amount")
+VALUES (gen_random_uuid(), '3c43b988-e7e6-432e-af63-af6b3b0cad70', 'f9754668-678a-455b-a4fb-07ec52f5cb2d', 1);
+
+DELETE FROM "MealOrder" WHERE "MealId" = '3c43b988-e7e6-432e-af63-af6b3b0cad70';
+
+SELECT * FROM "Meal";
+SELECT * FROM "Order";
+SELECT * FROM "MealOrder";
+
+DROP TABLE "DeliveryDriver";
+DROP TABLE "Order";
+DROP TABLE "Payment";
+DROP TABLE "MealOrder";
+
+
+SELECT "Account"."FirstName", "Account"."LastName", "VehicleType"."Brand", "VehicleType"."Model"
+FROM "Account"
+INNER JOIN "DeliveryDriver" ON "Account"."Id" = "DeliveryDriver"."Id"
+INNER JOIN "VehicleType" ON "DeliveryDriver"."VehicleTypeId" = "VehicleType"."Id";
+
+
+SELECT "Account"."FirstName", "Account"."LastName", "VehicleType"."Brand", "VehicleType"."Model"
+FROM "Account"
+LEFT JOIN "DeliveryDriver" ON "Account"."Id" = "DeliveryDriver"."Id"
+LEFT JOIN "VehicleType" ON "DeliveryDriver"."VehicleTypeId" = "VehicleType"."Id"
+WHERE "Brand" IS NOT NULL;
+
+SELECT "Meal"."Name", "Restaurant"."Name", "Meal"."Price"
+FROM "Restaurant"
+RIGHT JOIN "Meal" ON "Meal"."RestaurantId" = "Restaurant"."Id";
