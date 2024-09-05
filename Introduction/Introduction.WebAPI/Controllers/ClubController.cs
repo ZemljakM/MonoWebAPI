@@ -43,7 +43,7 @@ namespace Introduction.WebAPI.Controllers
             filteredClubs = _clubs.Where(c => (string.IsNullOrEmpty(name) || string.Equals(c.Name, name, StringComparison.OrdinalIgnoreCase))
                                   && (string.IsNullOrEmpty(sport) || string.Equals(c.Sport, sport, StringComparison.OrdinalIgnoreCase))
                                   && (!dateofEstablishment.HasValue || c.DateOfEstablishment.Equals(dateofEstablishment))
-                                  && (numberOfMembers==0 || c.NumberOfMembers.Equals(numberOfMembers)))
+                                  && (numberOfMembers==0 || c.NumberOfMembers == numberOfMembers))
                 .ToList();
 
             return Ok(filteredClubs);
@@ -53,12 +53,10 @@ namespace Introduction.WebAPI.Controllers
         [HttpPost]
         public IActionResult PostClub(Club club)
         {
-            if (_clubs.Any(c => c.Id == club.Id))
+            if (_clubs.Any(c => c.Id == club.Id) || club.Id < 1)
                 return BadRequest("Invalid request.");
-            else if (club.Id > 0)
+            else 
                 _clubs.Add(club);
-            else
-                return BadRequest("Invalid data.");
 
             return Ok(_clubs);
         }
@@ -71,20 +69,19 @@ namespace Introduction.WebAPI.Controllers
             Club? clubToUpdate = _clubs.FirstOrDefault(c => c.Id == id);
             if (clubToUpdate == null)
                 return NotFound();
-            else
-            {
-                if(!string.IsNullOrEmpty(club.Name))
-                    clubToUpdate.Name = club.Name;
+            
+            if(!string.IsNullOrEmpty(club.Name))
+                clubToUpdate.Name = club.Name;
 
-                if(!string.IsNullOrEmpty(club.Sport))
-                    clubToUpdate.Sport = club.Sport;
+            if(!string.IsNullOrEmpty(club.Sport))
+                clubToUpdate.Sport = club.Sport;
 
-                if(club.DateOfEstablishment.HasValue)
-                    clubToUpdate.DateOfEstablishment = club.DateOfEstablishment;
+            if(club.DateOfEstablishment.HasValue)
+                clubToUpdate.DateOfEstablishment = club.DateOfEstablishment;
 
-                if(club.NumberOfMembers > 0)
-                    clubToUpdate.NumberOfMembers = club.NumberOfMembers;
-            }
+            if(club.NumberOfMembers > 0)
+                clubToUpdate.NumberOfMembers = club.NumberOfMembers;
+                
             return Ok(_clubs);
 
         }
@@ -99,7 +96,7 @@ namespace Introduction.WebAPI.Controllers
                 _clubs.Remove(club);
             else 
                 return NotFound();
-            return Ok(_clubs);
+            return NoContent();
         }
 
 
