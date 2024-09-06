@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\marij\\source\\repos\\MonoPraksa\\Introduction\\Introduction.WebAPI\\Introduction.WebAPI.csproj": {}
+    "C:\\Users\\marij\\MonoWebAPI\\Introduction\\Introduction.WebAPI\\Introduction.WebAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\marij\\source\\repos\\MonoPraksa\\Introduction\\Introduction.WebAPI\\Introduction.WebAPI.csproj": {
+    "C:\\Users\\marij\\MonoWebAPI\\Introduction\\Introduction.WebAPI\\Introduction.WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\marij\\source\\repos\\MonoPraksa\\Introduction\\Introduction.WebAPI\\Introduction.WebAPI.csproj",
+        "projectUniqueName": "C:\\Users\\marij\\MonoWebAPI\\Introduction\\Introduction.WebAPI\\Introduction.WebAPI.csproj",
         "projectName": "Introduction.WebAPI",
-        "projectPath": "C:\\Users\\marij\\source\\repos\\MonoPraksa\\Introduction\\Introduction.WebAPI\\Introduction.WebAPI.csproj",
+        "projectPath": "C:\\Users\\marij\\MonoWebAPI\\Introduction\\Introduction.WebAPI\\Introduction.WebAPI.csproj",
         "packagesPath": "C:\\Users\\marij\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\marij\\source\\repos\\MonoPraksa\\Introduction\\Introduction.WebAPI\\obj\\",
+        "outputPath": "C:\\Users\\marij\\MonoWebAPI\\Introduction\\Introduction.WebAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

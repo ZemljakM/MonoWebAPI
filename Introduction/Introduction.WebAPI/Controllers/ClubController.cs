@@ -8,8 +8,7 @@ namespace Introduction.WebAPI.Controllers
     [ApiController]
     public class ClubController : ControllerBase
     {
-        private static List<Club> _clubs = new List<Club>();   //ne public jer nijedna druga baza nece citati
-                                                               //potrazi zasto _clubs
+        private static List<Club> _clubs = new List<Club>();   
 
         [HttpGet]
         public IActionResult GetAllClubs()
@@ -94,8 +93,7 @@ namespace Introduction.WebAPI.Controllers
             Club? club = _clubs.FirstOrDefault(c => c.Id == id);
             if (club != null)
                 _clubs.Remove(club);
-            else 
-                return NotFound();
+            
             return NoContent();
         }
 
