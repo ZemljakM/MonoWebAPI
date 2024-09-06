@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qYtKjFizfUU=",
+  "dgSpecHash": "efKalE5CO9U=",
   "success": true,
-  "projectFilePath": "C:\\Users\\marij\\source\\repos\\MonoPraksa\\Introduction\\Introduction.WebAPI\\Introduction.WebAPI.csproj",
+  "projectFilePath": "C:\\Users\\marij\\MonoWebAPI\\Introduction\\Introduction.WebAPI\\Introduction.WebAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\marij\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "C:\\Users\\marij\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",

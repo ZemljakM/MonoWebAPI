@@ -94,8 +94,7 @@ namespace Introduction.WebAPI.Controllers
             Club? club = _clubs.FirstOrDefault(c => c.Id == id);
             if (club != null)
                 _clubs.Remove(club);
-            else 
-                return NotFound();
+            
             return NoContent();
         }
 
